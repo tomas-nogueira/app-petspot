@@ -6,6 +6,7 @@ import Busca from '../Components/Busca';
 import { AuthContext } from '../Context/AuthContext';
 import Login from '../Components/Login';
 import { Ionicons } from '@expo/vector-icons';
+import CadastrarUser from '../Components/CadastrarUser';
 
 const Tab = createBottomTabNavigator();
 
@@ -51,7 +52,7 @@ if( !logado ) {
                     }}>
 
             </Tab.Screen>
-            <Tab.Screen name='Login' component={Login}
+            <Tab.Screen name='CadastrarUser' component={CadastrarUser}
               options={{
                 tabBarIcon: (tabInfo) => {
                     return (
