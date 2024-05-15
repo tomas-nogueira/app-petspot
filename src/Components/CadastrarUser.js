@@ -1,260 +1,107 @@
-import { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, Alert} from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView, Alert, FlatList} from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function CadastrarUser() {
 
-    const [email, setEmail] = useState('');
-    const [nomeUsuario, setNomeUsuario] = useState('');
-    const [senha, setSenha] = useState('');
-    const [nome, setNome] = useState('');
-    const [sobrenome, setSobrenome] = useState('');
-    const [cidade, setCidade] = useState('');
-    const [rua, setRua] = useState('');
-    const [numeroCasa, setNumeroCasa] = useState('');
-    const [codPostal, setCodPostal] = useState('');
-    const [telefone, setTelefone] = useState('');
-    const [erro, setErro] = useState(false);
+    const [usuarios, setUsuarios] = useState([])
+    const [busca, setBusca] = useState(''); 
+    const [filtro, setFiltro] = useState(null);
+    const [error, setError] = useState(false);
+    const [edicao, setEdicao] = useState(false);
+    const [iduser, setIduser] = useState(0);
+    const [userName, setName] = useState();
+    const [userEmail, setEmail] = useState();
+    const [userSenha, setSenha] = useState();
 
-    async function Cadastro(){
-        await fetch('https://fakestoreapi.com/users', {
-            method: 'POST',
+    async function getUsuarios(){
+        await fetch('http://10.139.75.54:5251/api/Users/GetAllUsers', {
+            method: 'GET',
             headers: {
-                'content-type': 'application/json'
+              'content-type': 'application/json'
             },
-            body: JSON.stringify({
-                email: email,
-                username: nomeUsuario,
-                password: senha,
-                name: {
-                    firstname: nome,
-                    lastnome: sobrenome,
-                },
-                address: {
-                    city: cidade,
-                    street: rua,
-                    number: numeroCasa,
-                    zipcode: codPostal
-                },
-                phone: telefone
-            })
         })
-        .then( res => {
-            if (res.ok) {
-                return res.json();
-            } else {
-                throw new Error('Erro ao cadastrar usuário');
-            }
-        })
-        .then( json => {
-            if (json && json.id) {
-                Alert.alert("Sucesso", "Seu cadastro foi realizado com sucesso", [
-                    {
-                        text: "OK",
-                        onPress: () => {
-                            // Limpar os campos
-                            setEmail('');
-                            setNomeUsuario('');
-                            setSenha('');
-                            setNome('');
-                            setSobrenome('');
-                            setCidade('');
-                            setRua('');
-                            setNumeroCasa('');
-                            setCodPostal('');
-                            setTelefone('');
-                        }
-                    }
-                ]);
-            }
-        })
-        .catch(err => {
-            setErro(true);
-            console.error('Erro:', err);
-        });
-    }
+            .then(res => res.json())
+            .then(json => setUsuarios(json))
+            .catch(err => setError(true))
+
+        }
+
+        useEffect(() => {
+            getUsuarios();
+        }, []);
+
+        useFocusEffect(
+            React.useCallback(() => {
+            getUsuarios();
+            },[])
+        )       
 
     return(
-        <ScrollView contentContainerStyle={css.main}>
-                <View style={css.container}>
-                    <View style={css.oracle}>
-                        <View style={css.boximg}>
-                            <Image source={require('../../assets/oracle.png')} style={css.img}/>
-                        </View>
-                        <View style={css.cadastrobox}>
-                            <Image source={require('../../assets/logo.png')}/>
-                            <Text style={css.welcome}>CADASTRAR USUÁRIO</Text>
+        <View style={styles.container}>
+        {edicao == false ? (
+            <FlatList
+                style={styles.flat}
+                data={usuarios}
+                keyExtractor={(item) => item.userId}
+                renderItem={({item}) => (
+                    <View style={styles.userContainer}>
+                        <Text style={styles.userName}>{item.userName}</Text>
+                        <View style={styles.buttonsContainer}>
+                            <TouchableOpacity style={styles.btnEdit}>
+                                <MaterialIcons name="edit" size={24} color="white" />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.btnDelete}>
+                                <MaterialIcons name="delete" size={24} color="white" />
+                            </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={css.boxinput}>
-                        <TextInput 
-                        style={css.input} 
-                        placeholder='Insira o e-mail'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={email}
-                        onChangeText={(digitado) => setEmail(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira seu nome de usuário'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={nomeUsuario}
-                        onChangeText={(digitado) => setNomeUsuario(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira sua senha'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        onChangeText={(digitado) => setSenha(digitado)}
-                        TextInput={senha}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira seu nome'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={nome}
-                        onChangeText={(digitado) => setNome(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira seu sobrenome'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={sobrenome}
-                        onChangeText={(digitado) => setSobrenome(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira sua cidade'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={cidade}
-                        onChangeText={(digitado) => setCidade(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira sua rua'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={rua}
-                        onChangeText={(digitado) => setRua(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira o número da sua casa'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={numeroCasa}
-                        onChangeText={(digitado) => setNumeroCasa(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira seu Cod. Postal'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={codPostal}
-                        onChangeText={(digitado) => setCodPostal(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira seu telefone'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={telefone}
-                        onChangeText={(digitado) => setTelefone(digitado)}
-                        />
-                    </View>
-                    <TouchableOpacity style={css.btn} onPress={Cadastro}>
-                        <Text style={css.btnText}>CADASTRAR</Text>
-                    </TouchableOpacity>
-                    <View/>
-                </View>
-    </ScrollView>
-    )
+                )}
+            />
+        ) : (
+            <View></View>
+        )}
+    </View>
+);
 }
 
-const css = StyleSheet.create({
-    boxinput: {
-        marginTop: 5
-    },
-    container: {
-        alignItems: "center",
-        justifyContent: "center",
-        display: "flex",
-    },
-    input: {
-        marginTop: 30,
-        color: 'white', 
-        height: 45,
-        fontSize: 16,
-        textAlign: "left",
-        borderBottomColor: "#484E55",
-        borderBottomWidth: 1,
-        width: 230,
-    },
-    btn: {
-        marginTop: 50 ,
-        backgroundColor: 'transparent', 
-        paddingVertical: 8,
-        paddingHorizontal: 30,
-        borderRadius: 10, 
-        height: 55,
-        width: 220,
-        borderWidth: 2,
-        borderColor: 'white',
-        marginBottom: 50
-    },
-    highinput: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        gap: 10
-    },
-    downinput: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        gap: 10
-    },
-    main: {
-        backgroundColor: '#111123',
-        flexGrow: 1
-    },
-    btnText: {
-        alignContent: 'center',
-        alignSelf: 'center',
-        textAlign: 'center',
-        fontSize: 24,
-        color: 'white',
-        fontWeight: 'bold',
-        marginTop: 1
-    },
-    oracle: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    welcome: {
-        fontSize: 22,
-        color: 'white',
-        fontWeight: '600'
-    },
-    img: {
-        alignItems: 'center',
-        width: 200,
-        resizeMode: 'contain'
-      },
-      boximg: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 140
-      },
-      cadastrobox: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 12
-      },
-      sucesso: {
-        fontSize: 25,
-        color: 'white',
-        textAlign: 'center',
-        marginTop: 120
-      }
+const styles = StyleSheet.create({
+container: {
+    flex: 1,
+    backgroundColor: '#111123',
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+},
+userContainer: {
+    backgroundColor: '#1E1E3F',
+    borderRadius: 12,
+    padding: 40,
+    marginBottom: 30,
+    width: '95%',
+    alignItems: 'center',
+},
+userName: {
+    color: '#FFF',
+    fontSize: 20,
+    marginBottom: 15,
+},
+buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: '80%',
+},
+btnEdit: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 8,
+    marginRight: 10,
+},
+btnDelete: {
+    backgroundColor: '#FF5733',
+    padding: 10,
+    borderRadius: 8,
+},
 });

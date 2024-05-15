@@ -1,11 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TextInput, Image, ActivityIndicator } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { StyleSheet, Text, View, TextInput, Image, ActivityIndicator, Animated} from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Busca() {
+
   const [usuarios, setUsuarios] = useState([]);
   const [busca, setBusca] = useState('');
   const [filtro, setFiltro] = useState(null);
+
+  const fade = useRef(new Animated.Value(0) ).current;
+
+    useFocusEffect( // toda vez que a tela for carregada ele carrega junto
+        React.useCallback(() => {
+          fade.setValue(0);
+            Animated.timing(fade, {
+                toValue: 1,
+                duration: 600,
+                useNativeDriver: true,
+
+            }
+            ).start();
+        },[])
+    );
 
   async function getUsuarios() {
     await fetch('https://fakestoreapi.com/users', {
@@ -33,8 +50,9 @@ export default function Busca() {
 
   return (
     <View style={css.container}>
+      <Animated.View style= {{ opacity: fade }}>
       <View style={css.boximg}>
-        <Image source={require('../../assets/oracle.png')} style={css.img} />
+          <Image source={require('../../assets/oracle.png')} style={css.img} />
       </View>
       <View style={css.boxsearch}>
         <TextInput
@@ -46,6 +64,7 @@ export default function Busca() {
         />
         <FontAwesome name="search" size={24} color="#7E2C28" style={css.searchIcon} />
       </View>
+      </Animated.View>
       {busca !== '' && !filtro && (
         <ActivityIndicator style={css.loadingIndicator} size="large" color="#7E2C28" />
       )}
