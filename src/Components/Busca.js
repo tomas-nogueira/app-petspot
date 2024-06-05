@@ -52,7 +52,6 @@ export default function Busca() {
     <View style={css.container}>
       <Animated.View style= {{ opacity: fade }}>
       <View style={css.boximg}>
-          <Image source={require('../../assets/oracle.png')} style={css.img} />
       </View>
       <View style={css.boxsearch}>
         <TextInput

@@ -78,10 +78,8 @@ export default function CadastrarUser() {
                 <View style={css.container}>
                     <View style={css.oracle}>
                         <View style={css.boximg}>
-                            <Image source={require('../../assets/oracle.png')} style={css.img}/>
                         </View>
                         <View style={css.cadastrobox}>
-                            <Image source={require('../../assets/logo.png')}/>
                             <Text style={css.welcome}>CADASTRAR USUÁRIO</Text>
                         </View>
                     </View>

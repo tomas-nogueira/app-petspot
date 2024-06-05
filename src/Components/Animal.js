@@ -3,17 +3,18 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // Importe o FontAwesome ou outro pacote de ícones que você esteja usando
 
 
-export default function Produto({ item }) {
+export default function Animal({ item }) {
     return (
         <View style={styles.container}>
-            <Image source={{ uri: item.image }} style={styles.imagem} />
+            <Image source={{ uri: item.animalFoto }} style={styles.imagem} />
             <View style={styles.infoContainer}>
-                <Text style={styles.titulo}>{item.title}</Text>
-                <Text style={styles.preco}>Preço: R$ {item.price}</Text>
-                <Text style={styles.categoria}>Categoria: {item.category}</Text>
-                <Text style={styles.avaliacao}>Avaliação: {item.rating.count}</Text>
+                <Text style={styles.titulo}>Nome: {item.animalNome}</Text>
+                <Text style={styles.preco}>Raça: {item.animalRaca}</Text>
+                <Text style={styles.preco}>Tipo: {item.animalTipo}</Text>
+                <Text style={styles.categoria}>Categoria: {item.animalCor}</Text>
+                <Text style={styles.avaliacao}>Sexo: {item.animalSexo}</Text>
                 <TouchableOpacity style={styles.botaoComprar}>
-                <FontAwesome name="heart" size={20} color="white" />
+                <FontAwesome name="plus" size={20} color="white"/>
                 </TouchableOpacity>
             </View>
         </View>
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     },
     preco: {
         fontSize: 16,
-        color: 'green',
+        color: 'black',
         marginBottom: 5,
     },
     categoria: {

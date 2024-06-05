@@ -19,9 +19,8 @@ export default function Login() {
   return(
     <ScrollView contentContainerStyle={css.main}>
         <View style={css.container}>
-            <View style={css.oracle}>
-                <Image source={require('../../assets/logo.png')}/>
-                <Text style={css.welcome}>Welcome to Oracle!</Text>
+            <View style={css.petSpot}>
+                <Image source={require('../../assets/logo-final.png')} style={css.img}/>
             </View>
             <View style={css.boxinput}>
                 <TextInput 
@@ -46,7 +45,7 @@ export default function Login() {
             <View/>
             {error && 
                 <View>
-                    <Text style={css.texterro}>Revise os campos e tente novamente!</Text>
+                    <Text style={css.texterro}>Email ou Senha incorretos.</Text>
                 </View>
             }
         </View>
@@ -55,11 +54,13 @@ export default function Login() {
 }
 
 const css = StyleSheet.create({
-    boxinput: {
-        marginTop: 5
+    img: {
+        height: 230,
+        width: 230,  
+        resizeMode: 'contain'
     },
     container: {
-        marginTop: 180,
+        marginTop: 140,
         alignItems: "center",
         justifyContent: "center",
         display: "flex",
@@ -75,7 +76,7 @@ const css = StyleSheet.create({
         width: 230,
     },
     btn: {
-        marginTop: 50 ,
+        marginTop: 60 ,
         backgroundColor: 'transparent', 
         paddingVertical: 8,
         paddingHorizontal: 30,
@@ -89,13 +90,11 @@ const css = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-evenly",
-        gap: 10
     },
     downinput: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-evenly",
-        gap: 10
     },
     main: {
         height: '100%',
@@ -110,17 +109,6 @@ const css = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         marginTop: 1
-    },
-    oracle: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10
-    },
-    welcome: {
-        fontSize: 22,
-        color: 'white',
-        fontWeight: '600'
     },
     texterro: {
         color: 'red',
