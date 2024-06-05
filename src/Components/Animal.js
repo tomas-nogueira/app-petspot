@@ -2,19 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // Importe o FontAwesome ou outro pacote de ícones que você esteja usando
 
-
-export default function Animal({ item }) {
+export default function Animal({ item, onPress }) {
     return (
         <View style={styles.container}>
             <Image source={{ uri: item.animalFoto }} style={styles.imagem} />
             <View style={styles.infoContainer}>
-                <Text style={styles.titulo}>Nome: {item.animalNome}</Text>
-                <Text style={styles.preco}>Raça: {item.animalRaca}</Text>
-                <Text style={styles.preco}>Tipo: {item.animalTipo}</Text>
-                <Text style={styles.categoria}>Categoria: {item.animalCor}</Text>
-                <Text style={styles.avaliacao}>Sexo: {item.animalSexo}</Text>
-                <TouchableOpacity style={styles.botaoComprar}>
-                <FontAwesome name="plus" size={20} color="white"/>
+                <Text style={styles.titulo}>Nome: <Text style={styles.nome}>{item.animalNome}</Text></Text>
+                <Text style={styles.raca}>Raça: {item.animalRaca}</Text>
+                <Text style={styles.raca}>Tipo: {item.animalTipo}</Text>
+                <TouchableOpacity style={styles.botaoComprar} onPress={() => onPress(item)}>
+                    <FontAwesome name="plus" size={20} color="white"/>
                 </TouchableOpacity>
             </View>
         </View>
@@ -25,13 +22,12 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#33334E',
         padding: 10,
         marginBottom: 10,
-        borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 5,
-        marginHorizontal: 40,
+        marginHorizontal: 65,
         marginBottom: 50
     },
     infoContainer: {
@@ -43,31 +39,33 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 200,
         resizeMode: 'contain',
-        borderRadius: 5,
     },
     titulo: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
+        color: 'white'
     },
-    preco: {
+    raca: {
         fontSize: 16,
-        color: 'black',
+        color: 'white',
         marginBottom: 5,
     },
     categoria: {
         fontSize: 14,
         fontStyle: 'italic',
         marginBottom: 5,
+        color: 'white'
     },
     avaliacao: {
         fontSize: 14,
+        color: 'white'
     },
     botaoComprar: {
         position: 'absolute',
         bottom: 10,
         right: 10,
-        backgroundColor: 'red',
+        backgroundColor: '#8484CE',
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 50,
@@ -76,4 +74,10 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
     },
+    nome: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        color: '#8484A3'
+    }
 });

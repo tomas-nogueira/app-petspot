@@ -33,7 +33,7 @@ if( !logado ) {
                         <Ionicons
                             name='home-outline'
                             size={36}
-                            color={tabInfo.focused ? "red" : "white"}
+                            color={tabInfo.focused ? "#8484CE" : "white"}
                         />
                     )
                 }
@@ -46,7 +46,7 @@ if( !logado ) {
                           <Ionicons
                               name='search-outline'
                               size={36}
-                              color={tabInfo.focused ? "red" : "white"}
+                              color={tabInfo.focused ? "#8484CE" : "white"}
                           />
                       )
                   }
@@ -60,7 +60,7 @@ if( !logado ) {
                         <Ionicons
                             name='person-outline'
                             size={36}
-                            color={tabInfo.focused ? "red" : "white"}
+                            color={tabInfo.focused ? "#8484CE" : "white"}
                         />
                     )
                 }
@@ -73,7 +73,7 @@ if( !logado ) {
                         <Ionicons
                             name='person-outline'
                             size={36}
-                            color={tabInfo.focused ? "red" : "white"}
+                            color={tabInfo.focused ? "#8484CE" : "white"}
                         />
                     )
                 }
