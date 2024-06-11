@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import { ActivityIndicator, Image, StyleSheet, View, FlatList, Animated, Modal, Text, Button, TextInput, ScrollView } from "react-native";
+import { ActivityIndicator, Image, StyleSheet, View, FlatList, Animated, Modal, Text, Button, TextInput, ScrollView, Alert } from "react-native";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import Animal from "./Animal";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -10,7 +11,8 @@ export default function Home() {
   const [showAddObservation, setShowAddObservation] = useState(false);
   const [observationDescricao, setObservationDescricao] = useState('');
   const [observationLocal, setObservationLocal] = useState('');
-  const [observationData, setObservationData] = useState('');
+  const [observationData, setObservationData] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [observations, setObservations] = useState([]);
   const [error, setError] = useState(false);
 
@@ -83,7 +85,7 @@ export default function Home() {
     setShowAddObservation(false);
     setObservationDescricao('');
     setObservationLocal('');
-    setObservationData('');
+    setObservationData(new Date());
     setObservations([]);
   };
 
@@ -111,7 +113,7 @@ export default function Home() {
         setShowAddObservation(false);
         setObservationDescricao('');
         setObservationLocal('');
-        setObservationData('');
+        setObservationData(new Date());
       } else {
         setError(true);
       }
@@ -122,6 +124,12 @@ export default function Home() {
 
   const handleCancelarObservacao = () => {
     setShowAddObservation(false);
+  };
+
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || observationData;
+    setShowDatePicker(false);
+    setObservationData(currentDate);
   };
 
   return (
@@ -169,12 +177,18 @@ export default function Home() {
                     value={observationLocal}
                     onChangeText={setObservationLocal}
                   />
-                  <TextInput
-                    style={css.input}
-                    placeholder="Data da observação"
-                    value={observationData}
-                    onChangeText={setObservationData}
-                  />
+                  <Button onPress={() => setShowDatePicker(true)} title="Selecionar Data" />
+                  {showDatePicker && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={observationData}
+                      mode="date"
+                      is24Hour={true}
+                      display="default"
+                      onChange={onChangeDate}
+                    />
+                  )}
+                  <Text style={css.dateText}>Data selecionada: {observationData.toLocaleDateString()}</Text>
                   <Button title="Salvar" onPress={handleSalvarObservacao} />
                   <Button title="Cancelar" onPress={handleCancelarObservacao} />
                 </>
@@ -309,6 +323,10 @@ const css = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
     width: '100%',
-    color: 'white'
+  },
+  dateText: {
+    fontSize: 16,
+    color: 'white',
+    marginBottom: 20,
   },
 });
