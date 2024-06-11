@@ -4,16 +4,9 @@ import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView,
 export default function CadastrarUser() {
 
     const [email, setEmail] = useState('');
-    const [nomeUsuario, setNomeUsuario] = useState('');
     const [senha, setSenha] = useState('');
     const [nome, setNome] = useState('');
-    const [sobrenome, setSobrenome] = useState('');
-    const [cidade, setCidade] = useState('');
-    const [rua, setRua] = useState('');
-    const [numeroCasa, setNumeroCasa] = useState('');
-    const [codPostal, setCodPostal] = useState('');
     const [telefone, setTelefone] = useState('');
-    const [erro, setErro] = useState(false);
 
     async function Cadastro(){
         await fetch('https://fakestoreapi.com/users', {
@@ -51,7 +44,6 @@ export default function CadastrarUser() {
                     {
                         text: "OK",
                         onPress: () => {
-                            // Limpar os campos
                             setEmail('');
                             setNomeUsuario('');
                             setSenha('');
@@ -93,13 +85,6 @@ export default function CadastrarUser() {
                         onChangeText={(digitado) => setEmail(digitado)}
                         />
                         <TextInput style={css.input} 
-                        placeholder='Insira seu nome de usuário'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={nomeUsuario}
-                        onChangeText={(digitado) => setNomeUsuario(digitado)}
-                        />
-                        <TextInput style={css.input} 
                         placeholder='Insira sua senha'
                         placeholderTextColor='white'
                         keyboardType='default'
@@ -112,41 +97,6 @@ export default function CadastrarUser() {
                         keyboardType='default'
                         TextInput={nome}
                         onChangeText={(digitado) => setNome(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira seu sobrenome'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={sobrenome}
-                        onChangeText={(digitado) => setSobrenome(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira sua cidade'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={cidade}
-                        onChangeText={(digitado) => setCidade(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira sua rua'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={rua}
-                        onChangeText={(digitado) => setRua(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira o número da sua casa'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={numeroCasa}
-                        onChangeText={(digitado) => setNumeroCasa(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira seu Cod. Postal'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={codPostal}
-                        onChangeText={(digitado) => setCodPostal(digitado)}
                         />
                         <TextInput style={css.input} 
                         placeholder='Insira seu telefone'

@@ -53,25 +53,12 @@ if( !logado ) {
                     }}>
 
             </Tab.Screen>
-            <Tab.Screen name='CadastrarUser' component={CadastrarUser}
-              options={{
-                tabBarIcon: (tabInfo) => {
-                    return (
-                        <Ionicons
-                            name='person-outline'
-                            size={36}
-                            color={tabInfo.focused ? "#8484CE" : "white"}
-                        />
-                    )
-                }
-                  }}
-            ></Tab.Screen>
             <Tab.Screen name='Perfil' component={Perfil}
               options={{
                 tabBarIcon: (tabInfo) => {
                     return (
                         <Ionicons
-                            name='person-outline'
+                            name='add-circle-outline'
                             size={36}
                             color={tabInfo.focused ? "#8484CE" : "white"}
                         />
