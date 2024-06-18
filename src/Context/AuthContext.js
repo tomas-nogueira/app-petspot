@@ -5,7 +5,7 @@ export const AuthContext = createContext(0);
 
 function AuthProvider({children}) {
 
-    const[logado, setLogado] = useState(true);
+    const[logado, setLogado] = useState(false);
     const[error, setError] = useState(false);
 
     async function Login( email, senha ){
@@ -27,7 +27,11 @@ function AuthProvider({children}) {
                 const usuarioId = responseData.usuarioId.toString();// convertendo para string
                 await AsyncStorage.setItem("userId", usuarioId);
                 const id = await AsyncStorage.getItem('userId');
+                const usuarioNome = responseData.usuarioNome
+                await AsyncStorage.setItem("userNome", usuarioNome);
+                const nome = await AsyncStorage.getItem('userNome');
                 console.log(id)
+                console.log(nome)
             } else {
                 setError(true);
             }

@@ -146,7 +146,7 @@ const css = StyleSheet.create({
     fontWeight: 'bold'
   },
   loadingIndicator: {
-    marginTop: 20 // Espaçamento acima do indicador
+    marginTop: 20 
   },
   procure: {
     fontSize: 28,

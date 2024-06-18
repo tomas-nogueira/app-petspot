@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { ActivityIndicator, Image, StyleSheet, View, FlatList, Animated, Modal, Text, Button, TextInput, ScrollView, Alert } from "react-native";
+import { ActivityIndicator, Image, StyleSheet, View, FlatList, Animated, Modal, Text, Button, TextInput, ScrollView, Alert, TouchableOpacity } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Animal from "./Animal";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Home() {
   const [animal, setAnimal] = useState([]);
@@ -18,6 +19,10 @@ export default function Home() {
   const [error, setError] = useState(false);
 
   const fade = useRef(new Animated.Value(0)).current;
+
+  async function PegaNome() {
+    const usuarioNome = await AsyncStorage.getItem('userNome');
+  }
 
   useFocusEffect(
     React.useCallback(() => {
@@ -161,6 +166,7 @@ export default function Home() {
       <Animated.View style={{ ...css.animatedView, opacity: fade }}>
         <View style={css.boximg}>
           <Image source={require('../../assets/logo-final.png')} style={css.img} />
+          <Text>Bem vindo, </Text>
         </View>
         {animal.length > 0 ? (
           <FlatList
@@ -201,7 +207,7 @@ export default function Home() {
                     value={observationLocal}
                     onChangeText={setObservationLocal}
                   />
-                  <Button onPress={() => setShowDatePicker(true)} title="Selecionar Data" />
+                  <Button onPress={() => setShowDatePicker(true)} title="Selecionar Data" color={"#8484CE"}/>
                   {showDatePicker && (
                     <DateTimePicker
                       testID="dateTimePicker"
@@ -213,8 +219,10 @@ export default function Home() {
                     />
                   )}
                   <Text style={css.dateText}>Data selecionada: {observationData.toLocaleDateString()}</Text>
-                  <Button title="Salvar" onPress={handleSalvarObservacao} />
-                  <Button title="Cancelar" onPress={handleCancelarObservacao} />
+                  <Button title="Salvar" onPress={handleSalvarObservacao} color={"#8484CE"}/>
+                  <TouchableOpacity onPress={handleCancelarObservacao} style={css.x}>
+                    <Ionicons name="close" size={40} color="white" />
+                  </TouchableOpacity>
                 </>
               ) : (
                 <>
@@ -224,6 +232,9 @@ export default function Home() {
                   <Text style={css.modalMoreInfo}>Tipo: {selectedAnimal.animalTipo}</Text>
                   <Text style={css.modalMoreInfo}>Cor: {selectedAnimal.animalCor}</Text>
                   <Text style={css.modalMoreInfo}>Sexo: {selectedAnimal.animalSexo}</Text>
+                  <Text style={css.modalMoreInfo}>Data desaparecimento: {selectedAnimal.animalDtDesaparecimento}</Text>
+                  <Text style={css.modalMoreInfo}>Data encontro: {selectedAnimal.animalDtEncontro}</Text>
+                  <Text style={css.modalMoreInfo}>Data encontro: {selectedAnimal.animalDtEncontro}</Text>
                   <Text style={css.modalObservacoesTitle}>Observações:</Text>
                   <ScrollView style={css.observacoesList}>
                     {observations.length > 0 ? (
@@ -235,11 +246,13 @@ export default function Home() {
                         </View>
                       ))
                     ) : (
-                      <Text style={css.semObservacoes}>Sem observações</Text>
+                      <Text style={css.semObservacoes}>Consultar no sistema</Text>
                     )}
                   </ScrollView>
-                  <Button title="Nova Observação" onPress={handleNovaObservacao} />
-                  <Button title="Fechar" onPress={closeModal} />
+                  <Button title="Nova Observação" onPress={handleNovaObservacao} color={'#8484CE'}/>
+                  <TouchableOpacity onPress={closeModal} style={css.x}>
+                    <Ionicons name="close" size={40} color="white" />
+                  </TouchableOpacity>
                 </>
               )}
             </View>
@@ -282,63 +295,74 @@ const css = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    width: 300,
+    width: '80%', 
+    maxHeight: '80%', 
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#33334E',
     borderRadius: 10,
     alignItems: 'center',
-    backgroundColor: '#33334E'
   },
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
     marginBottom: 10,
+    textAlign: 'center', 
   },
   modalImage: {
     width: 200,
     height: 200,
     marginBottom: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   modalDescription: {
     fontSize: 16,
     marginBottom: 5,
+    color: 'white',
+    textAlign: 'center',
   },
   modalMoreInfo: {
-    fontSize: 14,
+    fontSize: 16,
     marginBottom: 5,
+    color: 'white',
+    textAlign: 'center', 
   },
   modalObservacoesTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 10,
+    color: '#8484A3',
+    textAlign: 'center',
   },
   observacoesList: {
     width: '100%',
     marginBottom: 10,
   },
   observacaoItem: {
-    fontSize: 14,
-    padding: 5,
+    padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
   },
   observacaoDescricao: {
     fontSize: 14,
     fontWeight: 'bold',
+    marginBottom: 5,
   },
   observacaoLocal: {
     fontSize: 12,
+    marginBottom: 3,
+    color: '#8484A3',
   },
   observacaoData: {
     fontSize: 12,
+    color: '#8484A3',
   },
   semObservacoes: {
     fontSize: 14,
     fontStyle: 'italic',
     color: 'gray',
+    textAlign: 'center',
   },
   input: {
     height: 40,
@@ -347,10 +371,16 @@ const css = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
     width: '100%',
+    backgroundColor: 'white', 
+    borderRadius: 5, 
   },
   dateText: {
     fontSize: 16,
     color: 'white',
     marginBottom: 20,
+    textAlign: 'center', 
   },
+  x: {
+    marginTop: 10
+  }
 });
