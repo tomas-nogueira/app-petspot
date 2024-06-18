@@ -5,7 +5,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 export default function Busca() {
 
-  const [usuarios, setUsuarios] = useState([]);
+  const [animais, setAnimais] = useState([]);
   const [busca, setBusca] = useState('');
   const [filtro, setFiltro] = useState(null);
 
@@ -24,8 +24,8 @@ export default function Busca() {
         },[])
     );
 
-  async function getUsuarios() {
-    await fetch('https://fakestoreapi.com/users', {
+  async function getAnimais() {
+    await fetch('http://10.139.75.15:5251/api/Animals/GetAllAnimals', {
       method: 'GET',
       headers: {
         'content-type': 'application/json'
@@ -33,7 +33,7 @@ export default function Busca() {
     })
       .then(res => (res.ok === true) ? res.json() : [])
       .then(json => {
-        setUsuarios(json);
+        setAnimais(json);
       })
       .catch(err => {
         console.error(err);
@@ -41,17 +41,19 @@ export default function Busca() {
   }
 
   useEffect(() => {
-    getUsuarios();
+    getAnimais();
   }, []);
 
   useEffect(() => {
-    setFiltro(usuarios.find((item) => item.name.firstname === busca));
-  }, [busca, usuarios]);
+    setFiltro(animais.find((item) => item.animalNome === busca));
+  }, [busca, animais]);
 
   return (
     <View style={css.container}>
       <Animated.View style= {{ opacity: fade }}>
       <View style={css.boximg}>
+        <Image source={require('../../assets/logo-finalC.png')} style={css.img}/>
+        <Text style={css.procure}>PROCURE SEU PET!</Text>
       </View>
       <View style={css.boxsearch}>
         <TextInput
@@ -61,21 +63,21 @@ export default function Busca() {
           value={busca}
           onChangeText={(digitado) => setBusca(digitado)}
         />
-        <FontAwesome name="search" size={24} color="#7E2C28" style={css.searchIcon} />
+        <FontAwesome name="search" size={24} color="#8484CE" style={css.searchIcon} />
       </View>
       </Animated.View>
       {busca !== '' && !filtro && (
-        <ActivityIndicator style={css.loadingIndicator} size="large" color="#7E2C28" />
+        <ActivityIndicator style={css.loadingIndicator} size="large" color="#8484CE" />
       )}
       {filtro && (
-        <View style={css.userContainer}>
+        <View style={css.animalContainer}>
           <View style={css.profileIcon}>
-            <FontAwesome name="user-circle-o" size={60} color="white" />
+            <FontAwesome name="support" size={60} color="#FFFFEA" />
           </View>
-          <View style={css.userBox}>
-            <Text style={[css.userText, css.boldText]}>Nome do usuário: {filtro.name.firstname} {filtro.name.lastname}</Text>
-            <Text style={[css.userText, css.boldText]}>E-mail: {filtro.email}</Text>
-            <Text style={[css.userText, css.boldText]}>Telefone: {filtro.phone}</Text>
+          <View style={css.animalBox}>
+            <Text style={[css.animalText, css.boldText]}>Nome do animal: <Text style={css.nomeS}>{filtro.animalNome}</Text></Text>
+            <Text style={[css.animalText, css.boldText]}>Raça: {filtro.animalRaca}</Text>
+            <Text style={[css.animalText, css.boldText]}>Cor: {filtro.animalCor}</Text>
           </View>
         </View>
       )}
@@ -97,6 +99,7 @@ const css = StyleSheet.create({
     marginBottom: 20,
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 20
   },
   input: {
     flex: 1,
@@ -109,8 +112,8 @@ const css = StyleSheet.create({
   },
   img: {
     alignItems: 'center',
-    height: 210,
-    width: 220,
+    height: 120,
+    width: 120,
     resizeMode: 'contain'
   },
   boximg: {
@@ -119,7 +122,7 @@ const css = StyleSheet.create({
     justifyContent: 'center',
     height: 140
   },
-  userContainer: {
+  animalContainer: {
     backgroundColor: '#28283d',
     borderRadius: 10,
     padding: 20,
@@ -131,10 +134,10 @@ const css = StyleSheet.create({
   profileIcon: {
     marginBottom: 20
   },
-  userBox: {
+  animalBox: {
     alignItems: 'center'
   },
-  userText: {
+  animalText: {
     color: 'white',
     fontSize: 20,
     marginBottom: 10
@@ -144,5 +147,13 @@ const css = StyleSheet.create({
   },
   loadingIndicator: {
     marginTop: 20 // Espaçamento acima do indicador
+  },
+  procure: {
+    fontSize: 28,
+    color: '#FFFFEA',
+    fontWeight: '700'
+  },
+  nomeS: {
+    color: '#8484A3'
   }
 });

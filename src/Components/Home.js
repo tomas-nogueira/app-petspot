@@ -3,6 +3,7 @@ import { ActivityIndicator, Image, StyleSheet, View, FlatList, Animated, Modal, 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Animal from "./Animal";
 import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home() {
   const [animal, setAnimal] = useState([]);
@@ -31,7 +32,7 @@ export default function Home() {
 
   async function getAnimais() {
     try {
-      const response = await fetch('http://10.139.75.11:5251/api/Animals/GetAllAnimals', {
+      const response = await fetch('http://10.139.75.15:5251/api/Animals/GetAllAnimals', {
         method: 'GET',
         headers: {
           'content-type': 'application/json'
@@ -51,7 +52,7 @@ export default function Home() {
 
   async function getObservacoes(animalId) {
     try {
-      const response = await fetch(`http://10.139.75.11:5251/api/Observacoes/GetObservacoesId/${animalId}`, {
+      const response = await fetch(`http://10.139.75.15:5251/api/Observacoes/GetObservacoesId/${animalId}`, {
         method: 'GET',
         headers: {
           'content-type': 'application/json'
@@ -93,31 +94,54 @@ export default function Home() {
     setShowAddObservation(true);
   };
 
-  const handleSalvarObservacao = async () => {
+  async function handleSalvarObservacao (){
     try {
-      const response = await fetch(`http://10.139.75.11:5251/api/Observacoes/CreateObservacoes`, {
+      const usuarioId = await AsyncStorage.getItem('userId');
+      if (!usuarioId) {
+        Alert.alert('Erro', 'Usuário não encontrado.');
+        return;
+      }
+
+      console.log('Dados para envio:', {
+        animalId: selectedAnimal.animalsId,
+        observacoesDescricao: observationDescricao,
+        observacoesLocal: observationLocal,
+        observacoesData: observationData,
+        usuarioId: usuarioId
+      });
+
+      const response = await fetch('http://10.139.75.15:5251/api/Observacoes/CreateObservacoes', {
         method: 'POST',
         headers: {
           'content-type': 'application/json'
         },
         body: JSON.stringify({
-          animalId: selectedAnimal.animalsId,
+          animalsId: selectedAnimal.animalsId,
           observacoesDescricao: observationDescricao,
           observacoesLocal: observationLocal,
-          observacoesData: observationData
+          observacoesData: observationData.toISOString(), // Enviar data como string ISO
+          usuarioId: usuarioId
         }),
       });
 
+      console.log('Resposta da API:', response);
+
       if (response.ok) {
+        Alert.alert('Sucesso', 'Observação salva com sucesso.');
         getObservacoes(selectedAnimal.animalsId);
         setShowAddObservation(false);
         setObservationDescricao('');
         setObservationLocal('');
         setObservationData(new Date());
       } else {
+        const errorText = await response.text(); // Ler a resposta como texto
+        console.error('Erro ao salvar observação:', errorText);
+        Alert.alert('Erro', 'Falha ao salvar a observação.');
         setError(true);
       }
     } catch (err) {
+      console.error('Erro ao salvar observação:', err);
+      Alert.alert('Erro', 'Ocorreu um erro ao salvar a observação.');
       setError(true);
     }
   };
@@ -207,7 +231,7 @@ export default function Home() {
                         <View key={index} style={css.observacaoItem}>
                           <Text style={css.observacaoDescricao}>{obs.observacoesDescricao}</Text>
                           <Text style={css.observacaoLocal}>Local: {obs.observacoesLocal}</Text>
-                          <Text style={css.observacaoData}>Data: {obs.observacoesData}</Text>
+                          <Text style={css.observacaoData}>Data: {new Date(obs.observacoesData).toLocaleDateString()}</Text>
                         </View>
                       ))
                     ) : (

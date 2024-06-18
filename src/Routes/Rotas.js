@@ -6,7 +6,6 @@ import Busca from '../Components/Busca';
 import { AuthContext } from '../Context/AuthContext';
 import Login from '../Components/Login';
 import { Ionicons } from '@expo/vector-icons';
-import CadastrarUser from '../Components/CadastrarUser';
 import Perfil from '../Components/Perfil';
 
 const Tab = createBottomTabNavigator();

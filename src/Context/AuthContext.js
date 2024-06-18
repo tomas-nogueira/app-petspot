@@ -10,7 +10,7 @@ function AuthProvider({children}) {
 
     async function Login( email, senha ){
         try {
-            await fetch('http://10.139.75.11:5251/api/Usuario/LoginUsuario', {
+            await fetch('http://10.139.75.15:5251/api/Usuario/LoginUsuario', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -43,8 +43,8 @@ function AuthProvider({children}) {
     }
     }
 
-    async function Cadastro(email, senha, telefone, nome){
-        await fetch('http://10.139.75.11:5251/api/Usuario/CreateUsuario', {
+    async function Cadastro(nome, telefone, email, senha){
+        await fetch('http://10.139.75.15:5251/api/Usuario/CreateUsuario', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

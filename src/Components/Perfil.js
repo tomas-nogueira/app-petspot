@@ -3,32 +3,26 @@ import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, ScrollView,
 
 export default function CadastrarUser() {
 
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+    const [raca, setRaca] = useState('');
+    const [tipo, setTipo] = useState('');
     const [nome, setNome] = useState('');
-    const [telefone, setTelefone] = useState('');
+    const [cor, setCor] = useState('');
+    const [sexo, setSexo] = useState('');
+    const [observacao, setObservacao] = useState('');
+    const [foto, setFoto] = useState('');
+    const [dtDesaparecimento, setDtDesaparecimento] = useState('');
+    const [dtEncontro, setDtEncontro] = useState('');
+    const [status, setStatus] = useState('');
 
     async function Cadastro(){
-        await fetch('https://fakestoreapi.com/users', {
+        await fetch('http://10.139.75.15:5251/api/Animals/CreateAnimal', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
             },
             body: JSON.stringify({
-                email: email,
-                username: nomeUsuario,
-                password: senha,
-                name: {
-                    firstname: nome,
-                    lastnome: sobrenome,
-                },
-                address: {
-                    city: cidade,
-                    street: rua,
-                    number: numeroCasa,
-                    zipcode: codPostal
-                },
-                phone: telefone
+                animalNome: email,
+                
             })
         })
         .then( res => {
@@ -44,15 +38,15 @@ export default function CadastrarUser() {
                     {
                         text: "OK",
                         onPress: () => {
-                            setEmail('');
-                            setNomeUsuario('');
-                            setSenha('');
+                            setRaca('');
                             setNome('');
-                            setSobrenome('');
-                            setCidade('');
-                            setRua('');
-                            setNumeroCasa('');
-                            setCodPostal('');
+                            setTipo('');
+                            setCor('');
+                            setSexo('');
+                            setObservacao('');
+                            setDtDesaparecimento('');
+                            setDtEncontro('');
+                            setStatus('');
                             setTelefone('');
                         }
                     }
@@ -72,38 +66,38 @@ export default function CadastrarUser() {
                         <View style={css.boximg}>
                         </View>
                         <View style={css.cadastrobox}>
-                            <Text style={css.welcome}>CADASTRAR USUÁRIO</Text>
+                            <Text style={css.welcome}>CADASTRAR ANIMAL</Text>
                         </View>
                     </View>
                     <View style={css.boxinput}>
                         <TextInput 
                         style={css.input} 
-                        placeholder='Insira o e-mail'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        TextInput={email}
-                        onChangeText={(digitado) => setEmail(digitado)}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira sua senha'
-                        placeholderTextColor='white'
-                        keyboardType='default'
-                        onChangeText={(digitado) => setSenha(digitado)}
-                        TextInput={senha}
-                        />
-                        <TextInput style={css.input} 
-                        placeholder='Insira seu nome'
+                        placeholder='Insira o nome'
                         placeholderTextColor='white'
                         keyboardType='default'
                         TextInput={nome}
                         onChangeText={(digitado) => setNome(digitado)}
                         />
                         <TextInput style={css.input} 
-                        placeholder='Insira seu telefone'
+                        placeholder='Insira a raça'
                         placeholderTextColor='white'
                         keyboardType='default'
-                        TextInput={telefone}
-                        onChangeText={(digitado) => setTelefone(digitado)}
+                        onChangeText={(digitado) => setRaca(digitado)}
+                        TextInput={raca}
+                        />
+                        <TextInput style={css.input} 
+                        placeholder='Insira a cor'
+                        placeholderTextColor='white'
+                        keyboardType='default'
+                        TextInput={cor}
+                        onChangeText={(digitado) => setCor(digitado)}
+                        />
+                        <TextInput style={css.input} 
+                        placeholder='Insira o tipo'
+                        placeholderTextColor='white'
+                        keyboardType='default'
+                        TextInput={tipo}
+                        onChangeText={(digitado) => setTipo(digitado)}
                         />
                     </View>
                     <TouchableOpacity style={css.btn} onPress={Cadastro}>
